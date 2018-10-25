@@ -61,6 +61,9 @@ ruleTester.run("no-fallthrough", rule, {
         "switch (foo) { case 0: { a(); break; } default: b(); }",
         "switch (foo) { case 0: { try {throw 0;} catch (err) {break;} } default :b(); }",
         "switch (foo) { case 0:\ncase 1: {\na();\n// falls through\n}\ndefault: b(); }",
+        "switch (foo) { case 0: { a(); } // falls through\n default: b(); }",
+        "switch (foo) { case 0: { a();\n// comment\n} // falls through\n default: b(); }",
+        "switch (foo) { case 0: { a();\n// falls through\n} // comment\n default: b(); }",
         {
             code: "switch(foo) { case 0: a(); /* no break */ case 1: b(); }",
             options: [{
@@ -175,7 +178,7 @@ ruleTester.run("no-fallthrough", rule, {
             errors: errorsDefault
         },
         {
-            code: "switch (foo) { case 0: {} // comment\n default: b(); }",
+            code: "switch (foo) { case 0: { a(); } // comment\n default: b(); }",
             errors: errorsDefault
         },
         {
